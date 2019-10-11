@@ -1,0 +1,24 @@
+---
+- name: onaio.collectd
+  src: https://github.com/onaio/ansible-collectd.git
+  scm: git
+
+- name: onaio.monit
+  src: https://github.com/onaio/ansible-monit.git
+  scm: git
+
+- name: onaio.django
+  src: https://github.com/onaio/ansible-django.git
+  scm: git
+
+- name: onaio.nvm
+  src: https://github.com/onaio/ansible-nvm.git
+  scm: git
+
+- name: onaio.postgresql
+  src: https://github.com/onaio/ansible-postgresql.git
+  scm: git
+
+- name: onaio.gpg-import
+  src: https://github.com/onaio/ansible-gpg-import.git
+  scm: git

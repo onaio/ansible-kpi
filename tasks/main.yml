@@ -1,0 +1,51 @@
+---
+- name: Install npm global packages # noqa 301
+  command: "{{  kpi_nvm_npm_path }} install -g {{ item }}"
+  with_items: "{{ kpi_npm_requirements }}"
+  environment:
+    PATH: "{{ kpi_nvm_node_dir }}/bin:{{ ansible_env.PATH }}"
+  notify:
+    - restart_service
+
+- name: Install npm dependencies in package.json
+  npm:
+    executable: "{{  kpi_nvm_npm_path }}"
+    path: ""
+  ignore_errors: yes
+  environment:
+    PATH: "{{ kpi_nvm_node_dir }}/bin:{{ ansible_env.PATH }}"
+  notify:
+    - restart_service
+
+# adding the following task because sometimes error in 
+# https://github.com/sass/node-sass/issues/1579 is triggered
+- name: Re-install node-sass # noqa 301
+  command: "{{  kpi_nvm_npm_path }} rebuild node-sass"
+  environment:
+    PATH: "{{ kpi_nvm_node_dir }}/bin:{{ ansible_env.PATH }}"
+
+- name: Copy client-side config file
+  template:
+    src: templates/kpi/config.es6.j2
+    dest: "{{ kpi_static_path }}/js/config.es6"
+    mode: 0644
+
+- name: Build client code # noqa 301
+  command: "{{ kpi_grunt_path }} copy && {{  kpi_nvm_npm_path }} run build-production"
+  args:
+    chdir: "{{ kpi_checkout_path }}"
+  environment:
+    PATH: "{{ kpi_nvm_node_dir }}/bin:{{ ansible_env.PATH }}"
+    HOME: "{{ kpi_system_user_home }}"
+  notify:
+    - restart_service
+
+- name: syncdb, migrate and collect static files
+  django_manage:
+    command: "{{ item }}"
+    app_path: "{{ kpi_checkout_path }}"
+    virtualenv: "{{  kpi_venv_path }}"
+    settings: "{{ kpi_settings_app_name }}"
+  with_items: "{{ kpi_django_setup_commands }}"
+  notify:
+    - restart_service

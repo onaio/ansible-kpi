@@ -1,0 +1,61 @@
+---
+galaxy_info:
+  author: Ona Engineering
+  description: Installs and configures KPI Formbuilder
+  company: Ona Systems Inc
+  license: Apache-2.0
+  min_ansible_version: 2.6
+  platforms:
+    - name: Ubuntu
+      versions:
+        - 16.04
+        - 18.04
+  galaxy_tags:
+    - kpi
+    - formbuilder
+    - kobotoolbox
+
+dependencies:
+  - role: onaio.collectd
+    collectd_scripts: "{{ kpi_collectd_scripts }}"
+    collectd_deployed_app_name: "{{ kpi_service_name }}"
+    collectd_deployed_app_version: "{{ kpi_git_branch }}"
+    when: kpi_enable_monitoring
+
+  - role: onaio.monit
+    monit_scripts: "{{ kpi_monit_scripts }}"
+    when: kpi_enable_monitoring
+
+  - role: onaio.nvm
+    nvm_node_version: "{{ kpi_nvm_node_version }}"
+    nvm_install_path: "{{ kpi_nvm_install_path }}"
+    nvm_node_dir: "{{ kpi_nvm_node_dir }}"
+    nvm_npm_path: "{{ kpi_nvm_npm_path }}"
+
+  - role: onaio.django
+    django_system_user: "{{ kpi_system_user }}"
+    django_system_group: "{{ kpi_system_group }}"
+    django_system_user_home: "{{ kpi_system_home }}"
+    django_git_url: "{{ kpi_git_url }}"
+    django_git_version: "master"
+    django_git_key: "{{ kpi_git_key }}"
+    django_git_key_ssh_file: "{{ kpi_git_ssh_file }}"
+    django_git_key_filename: "{{ kpi_git_key_filename }}"
+    django_copy_key_from_file: "{{ kpi_copy_key_from_file }}"
+    django_remove_git_key: "{{ kpi_remove_git_key }}"
+    django_python_source_version: "{{ kpi_python_source_version }}"
+    django_python_version: "{{ kpi_python_version }}"
+    django_system_wide_dependencies: "{{ kpi_system_requirements }}"
+    django_service_name: "{{ kpi_service_name }}"
+    django_codebase_path: "{{ kpi_app_path }}"
+    django_checkout_path: "{{ kpi_checkout_path }}"
+    django_versioned_path: "{{ kpi_versioned_path }}"
+    django_init_commands: []
+    django_static_path: "{{ kpi_static_path }}"
+    django_settings_module: "{{ kpi_settings_app_name }}"
+    django_settings_template_path: "{{ kpi_settings_template_path }}"
+    django_wsgi_module: "{{ kpi_wsgi_module }}"
+    django_wsgi_processes: "{{ kpi_wsgi_processes }}"
+    django_wsgi_env: "{{ kpi_wsgi_env }}"
+    django_wsgi_enable_threads: "{{ kpi_wsgi_enable_threads }}"
+    django_celery_app: "{{ kpi_celery_app }}"
