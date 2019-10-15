@@ -10,3 +10,4 @@ Icon
 .vagrant
 test
 *.pyc
+.vscode/
