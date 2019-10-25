@@ -21,6 +21,10 @@
             - postgis
       postgresql_ext_install_postgis: true
       postgresql_ext_postgis_version: "2.3"
+      postgresql_ext_postgis_deps:
+        - libgeos-c1v5
+        - "postgresql-{{ postgresql_version }}-postgis-{{ postgresql_ext_postgis_version }}"
+        - "postgresql-{{ postgresql_version }}-postgis-{{ postgresql_ext_postgis_version }}-scripts"
     - role: ansible-kpi
       kpi_pgsql_db: kpi
       kpi_pgsql_user: kpi
