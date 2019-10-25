@@ -6,7 +6,6 @@ import multiprocessing
 import os
 import subprocess
 
-from celery.schedules import crontab
 import django.conf.locale
 from django.conf import global_settings
 from django.conf.global_settings import LOGIN_URL
@@ -135,7 +134,6 @@ INSTALLED_APPS = (
     'constance',
     'constance.backends.database',
     'kobo.apps.hook',
-    'django_celery_beat',
     'corsheaders',
     'kobo.apps.external_integrations.ExternalIntegrationsAppConfig',
     'markdownx',
@@ -480,22 +478,6 @@ CELERY_TASK_TIME_LIMIT = int(os.environ.get('CELERYD_TASK_TIME_LIMIT', 2100))
 
 CELERY_TASK_SOFT_TIME_LIMIT = int(os.environ.get(
     'CELERYD_TASK_SOFT_TIME_LIMIT', 1800))
-
-CELERY_BEAT_SCHEDULE = {
-    # Failsafe search indexing: update the Haystack index twice per day to
-    # catch any stragglers that might have gotten past
-    # haystack.signals.RealtimeSignalProcessor
-    #'update-search-index': {
-    #    'task': 'kpi.tasks.update_search_index',
-    #    'schedule': timedelta(hours=12)
-    #},
-    # Schedule every day at midnight UTC. Can be customized in admin section
-    "send-hooks-failures-reports": {
-        "task": "kobo.apps.hook.tasks.failures_reports",
-        "schedule": crontab(hour=0, minute=0),
-        'options': {'queue': 'kpi_queue'}
-    },
-}
 
 CELERY_BROKER_TRANSPORT_OPTIONS = {
     "fanout_patterns": True,
