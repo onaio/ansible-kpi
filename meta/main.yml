@@ -58,3 +58,4 @@ dependencies:
     django_pip_paths: "{{ kpi_pip_paths }}"
     django_pip_packages: "{{ kpi_django_pip_packages }}"
     django_enable_celery: "{{ kpi_django_enable_celery }}"
+    django_venv_path: "{{ kpi_venv_path }}"

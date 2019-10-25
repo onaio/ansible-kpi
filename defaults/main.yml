@@ -26,7 +26,7 @@ kpi_system_requirements:
 kpi_npm_requirements:
   - webpack
 kpi_django_setup_commands: 
-  # - syncdb --noinput
+  - syncdb --noinput
   - migrate --noinput
   - collectstatic --noinput
   - compilemessages
@@ -99,4 +99,4 @@ kpi_celery_app: "kpi.kpi_celery:app"
 kpi_django_pip_packages:
   - uwsgi
   - PyJWT==1.4.0
-kpi_django_enable_celery: false
+kpi_django_enable_celery: true
