@@ -86,8 +86,9 @@ kpi_cors_whitelist:
 kpi_wsgi_module: kobo.wsgi:application
 kpi_wsgi_processes: 12
 kpi_wsgi_env: "HTTPS=on"
-kpi_pid_dir: "/var/run/{{ kpi_service_name }}"
-kpi_pid_file: "{{ kpi_pid_dir }}/{{ kpi_service_name }}.pid"
+kpi_pid_socket_dir: "/var/run/{{ kpi_service_name }}"
+kpi_pid_file: "{{ kpi_pid_socket_dir }}/{{ kpi_service_name }}.pid"
+kpi_socket_file: "{{ kpi_pid_socket_dir }}/{{ kpi_service_name }}.socket"
 kpi_enable_https: true
 kpi_wsgi_enable_threads: false
 kpi_enable_monitoring: true
@@ -100,3 +101,4 @@ kpi_django_pip_packages:
   - uwsgi
   - PyJWT==1.4.0
 kpi_django_enable_celery: false
+kpi_uwsgi_total_memory_limit: 1024
