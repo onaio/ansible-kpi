@@ -11,3 +11,5 @@ Icon
 test
 *.pyc
 .vscode/
+roles/*
+*.log
