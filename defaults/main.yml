@@ -103,3 +103,4 @@ kpi_django_pip_packages:
 
 kpi_django_enable_celery: false
 kpi_uwsgi_total_memory_limit: 1024
+kpi_enketo_api_token: "random_string"
