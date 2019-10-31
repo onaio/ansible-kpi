@@ -64,7 +64,14 @@ if os.environ.get('CSRF_COOKIE_DOMAIN'):
 # https://github.com/ottoyiu/django-cors-headers#cors_model
 CORS_MODEL = 'external_integrations.CorsModel'
 
-CORS_ORIGIN_WHITELIST = ('127.0.0.1:3001', 'localhost:8000', 'localhost:3001')
+CORS_ORIGIN_WHITELIST = (
+    '127.0.0.1:3001',
+    'localhost:8000',
+    'localhost:3001',
+{% for origin in kpi_cors_origin_whitelist %}
+    '{{ origin }}',
+{% endfor %}
+)
 
 # CORS_ORIGIN_ALLOW_ALL = True
 
@@ -83,7 +90,7 @@ CORS_ALLOW_HEADERS = (
     'cache-control'
 )
 
-KPI_COOKIE_NAME = '_{{ kpi_formbuilder_cookie }}'
+KPI_COOKIE_NAME = '{{ kpi_formbuilder_cookie }}'
 
 # CORS_EXPOSE_HEADERS = (
 #     'Content-Type',
@@ -112,7 +119,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'reversion',
-    'debug_toolbar',
     'mptt',
     'haystack',
     'private_storage',
@@ -390,9 +396,9 @@ GOOGLE_ANALYTICS_TOKEN = os.environ.get(
 )
 
 # replace this with the pointer to the kobocat server, if it exists
-KOBOCAT_URL = os.environ.get('KOBOCAT_URL', 'http://localhost:8000')
+KOBOCAT_URL = os.environ.get('KOBOCAT_URL', '{{ kpi_kobocat_url }}')
 KOBOCAT_INTERNAL_URL = os.environ.get('KOBOCAT_INTERNAL_URL',
-                                      'http://localhost:8000')
+                                      '{{ kpi_kobocat_url }}')
 DEFAULT_DEPLOYMENT_BACKEND = 'kobocat'
 # if 'KOBOCAT_URL' in os.environ:
 #     DEFAULT_DEPLOYMENT_BACKEND = 'kobocat'
@@ -608,13 +614,15 @@ LOGGING = {
 }
 
 ''' Sentry configuration '''
-if os.environ.get('RAVEN_DSN', False):
+RAVEN_DSN = "{{ kpi_raven_dsn }}"
+RAVEN_JS_DSN = "{{ kpi_raven_js_dsn }}"
+if RAVEN_DSN:
     import raven
     INSTALLED_APPS = INSTALLED_APPS + (
         'raven.contrib.django.raven_compat',
     )
     RAVEN_CONFIG = {
-        'dsn': os.environ['RAVEN_DSN'],
+        'dsn':RAVEN_DSN,
     }
 
     # Set the `server_name` attribute. See https://docs.sentry.io/hosted/clients/python/advanced/

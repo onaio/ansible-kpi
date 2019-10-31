@@ -77,6 +77,7 @@ kpi_enketo_url: "http://localhost:8005"
 kpi_enketo_api_token: "qwertyuiop"
 kpi_broker_url: "amqp://{{ kpi_system_user }}:{{ kpi_system_user }}@localhost:5672"
 kpi_log_path: "/var/log/{{ kpi_service_name }}"
+kpi_cors_origin_whitelist: []
 
 # TODO: Add documentation for this config
 kpi_frontend_domain: "locahost:3001" 
@@ -103,4 +104,6 @@ kpi_django_pip_packages:
 
 kpi_django_enable_celery: false
 kpi_uwsgi_total_memory_limit: 1024
-kpi_enketo_api_token: "random_string"
+
+kpi_raven_dsn: ""
+kpi_raven_js_dsn: "{{ kpi_raven_dsn }}"

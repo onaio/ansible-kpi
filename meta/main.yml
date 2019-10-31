@@ -9,27 +9,12 @@ galaxy_info:
     - name: Ubuntu
       versions:
         - 16.04
-        - 18.04
   galaxy_tags:
     - kpi
     - formbuilder
     - kobotoolbox
 
 dependencies:
-  - role: onaio.collectd
-    collectd_scripts: "{{ kpi_collectd_scripts }}"
-    collectd_deployed_app_name: "{{ kpi_service_name }}"
-    collectd_deployed_app_version: "{{ kpi_git_branch }}"
-    when: kpi_enable_monitoring
-
-  - role: onaio.monit
-    monit_scripts: "{{ kpi_monit_scripts }}"
-    service_name: "{{ kpi_service_name }}"
-    pid_file: "{{ kpi_pid_file }}"
-    uses_systemd: true
-    uwsgi_total_memory_limit: "{{ kpi_uwsgi_total_memory_limit }}"
-    when: kpi_enable_monitoring
-
   - role: onaio.django
     django_system_user: "{{ kpi_system_user }}"
     django_system_group: "{{ kpi_system_group }}"
@@ -66,3 +51,17 @@ dependencies:
     django_pid_socks_dir:  "{{ kpi_pid_socket_dir }}"
     django_pid_file: "{{ kpi_pid_file }}"
     django_wsgi_socket: "{{ kpi_socket_file }}"
+
+  - role: onaio.collectd
+    collectd_scripts: "{{ kpi_collectd_scripts }}"
+    collectd_deployed_app_name: "{{ kpi_service_name }}"
+    collectd_deployed_app_version: "{{ kpi_git_branch }}"
+    when: kpi_enable_monitoring
+
+  - role: onaio.monit
+    monit_scripts: "{{ kpi_monit_scripts }}"
+    service_name: "{{ kpi_service_name }}"
+    pid_file: "{{ kpi_pid_file }}"
+    uses_systemd: true
+    uwsgi_total_memory_limit: "{{ kpi_uwsgi_total_memory_limit }}"
+    when: kpi_enable_monitoring

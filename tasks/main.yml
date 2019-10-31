@@ -14,13 +14,6 @@
   tags:
    - nvm
 
-# adding the following task because sometimes error in 
-# https://github.com/sass/node-sass/issues/1579 is triggered
-# - name: Re-install node-sass # noqa 301
-#   command: "{{  kpi_nvm_npm_path }} rebuild node-sass"
-#   environment:
-#     PATH: "{{ kpi_nvm_node_dir }}/bin:{{ ansible_env.PATH }}"
-
 - name: Copy client-side config file
   template:
     src: templates/kpi/config.es6.j2
@@ -53,3 +46,10 @@
   with_items: "{{ kpi_django_setup_commands }}"
   notify:
     - restart_service
+
+- name: Change ownership of all the KPI files
+  file:
+    path: "{{ kpi_checkout_path }}"
+    owner: "{{ kpi_system_user }}"
+    group: "{{ kpi_system_group }}"
+    recurse: true

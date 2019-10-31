@@ -16,24 +16,10 @@
     global: true
     name: "{{ item }}"
   with_items: "{{ kpi_npm_requirements }}"
-  become: true
-  become_user: "{{ kpi_system_user }}"
   environment:
     PATH: "{{ kpi_nvm_node_dir }}/bin:{{ ansible_env.PATH }}"
   notify:
     - restart_service
-
-# - name: Install npm dependencies in package.json
-#   npm:
-#     executable: "{{ kpi_nvm_npm_path }}"
-#     path: "{{ kpi_checkout_path }}"
-#     state: present
-#   become: true
-#   become_user: "{{ kpi_system_user }}"
-#   environment:
-#     PATH: "{{ kpi_nvm_node_dir }}/bin:{{ ansible_env.PATH }}"
-#   notify:
-#     - restart_service
 
 - name: Install npm dependencies in package.json # noqa 301
   command: "{{ kpi_nvm_npm_path }} install"
@@ -41,7 +27,6 @@
   become_user: "{{ kpi_system_user }}"
   args:
     chdir: "{{ kpi_checkout_path }}"
-    # creates: " {{ kpi_checkout_path }}/node_modules"
   environment:
     PATH: "{{ kpi_nvm_node_dir }}/bin:{{ ansible_env.PATH }}"
     HOME: "{{ kpi_system_user_home }}"
