@@ -1,6 +1,8 @@
 Ansible-kpi
 =========
 
+[![Build Status](https://travis-ci.org/onaio/ansible-kpi.svg?branch=master)](https://travis-ci.org/onaio/ansible-kpi)
+
 Use this role to install and configure KPI.
 
 Role Dependencies
@@ -8,11 +10,9 @@ Role Dependencies
 
 - onaio.collectd
 - onaio.monit
-- onaio.postgresql
 - ANXS.python
 - onaio.nvm
 - onaio.django
-- Stouts.backup
 
 Role Variables
 --------------
