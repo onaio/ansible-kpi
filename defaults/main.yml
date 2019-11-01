@@ -1,32 +1,37 @@
 ---
 kpi_system_requirements:
+  - build-essential
   - fontforge
   - gettext
   - git
+  - libffi-dev
   - libpcre3
   - libpcre3-dev
   - libpq-dev
-  - libffi-dev
-  - ttfautohint
-  - build-essential
-  - libpq-dev
-  - python-pip
-  - python-virtualenv
-  - python-celery
-  - python-software-properties
-  - python-setuptools
-  - python2.7-dev
-  - python-psycopg2
+  - libssl-dev
   - libxml2-dev
   - libxslt1-dev
+  - python-celery
+  - python-pip
+  - python-psycopg2
+  - python-setuptools
+  - python-software-properties
+  - python-virtualenv
+  - python2.7-dev
+  - ttfautohint
+  - zlib1g-dev
+  - binutils
+  - libproj-dev
+  - gdal-bin
 kpi_npm_requirements:
-  - grunt-cli
   - webpack
 kpi_django_setup_commands: 
   - syncdb --noinput
   - migrate --noinput
   - collectstatic --noinput
   - compilemessages
+kpi_pip_paths: "{{ kpi_checkout_path }}/dependencies/pip/external_services.txt"
+kpi_local_settings_path: "{{ kpi_checkout_path }}/kobo/local_settings.py"
 kpi_settings_app_name: "kobo.local_settings"
 kpi_settings_template_path: "templates/kpi/settings.py.j2"
 kpi_system_user_home: "/home/{{ kpi_system_user }}"
@@ -38,23 +43,26 @@ kpi_git_key_ssh_file:
 kpi_git_key_filename: id_ed25519
 kpi_copy_key_from_file: false
 kpi_remove_git_key: true
-django_python_source_version: 2.7
-django_python_version: "python2.7"
+kpi_python_source_version: 2.7
+kpi_python_version: "python2.7"
 kpi_checkout_path: "{{ kpi_versioned_path }}/{{ kpi_git_branch }}"
 kpi_app_path: "{{ kpi_system_user_home }}/app"
 kpi_versioned_path: "{{ kpi_app_path }}-versioned"
 kpi_git_branch: master
 kpi_service_name: "{{ kpi_system_user }}"
 kpi_venv_path: "{{ kpi_system_user_home }}/.virtualenvs/{{ kpi_service_name }}"
-kpi_nvm_install_path: "{{ nvm_home }}/.nvm"
-kpi_nvm_node_version: "v6.0.0"
-kpi_nvm_node_dir: "{{ kpi_nvm_install_path }}/versions/node/{{ nvm_node_version }}"
+kpi_nvm_install_path: "{{ kpi_system_user_home }}/.nvm"
+kpi_nvm_node_version: "v8.16.1"
+kpi_nvm_user: "{{ kpi_system_user }}"
+kpi_nvm_node_dir: "{{ kpi_nvm_install_path }}/versions/node/{{ kpi_nvm_node_version }}"
 kpi_nvm_npm_path: "{{ kpi_nvm_node_dir }}/bin/npm"
+kpi_nvm_version: "v0.34.0"
 kpi_grunt_path: "{{ kpi_nvm_node_dir }}/bin/grunt"
 kpi_static_path: "{{ kpi_checkout_path }}/jsapp"
 kpi_django_secret_key: "random-string"
 kpi_jwt_secret_key: "random-string"
 kpi_formbuilder_cookie: "__kpi_formbuilder"
+kpi_django_apt_python_ppa: ""
 
 # Use the exact anonymous_user_id as the one set on the onadata/formhub/kobocat app.
 kpi_anonymous_user_id: "-1"
@@ -69,6 +77,7 @@ kpi_enketo_url: "http://localhost:8005"
 kpi_enketo_api_token: "qwertyuiop"
 kpi_broker_url: "amqp://{{ kpi_system_user }}:{{ kpi_system_user }}@localhost:5672"
 kpi_log_path: "/var/log/{{ kpi_service_name }}"
+kpi_cors_origin_whitelist: []
 
 # TODO: Add documentation for this config
 kpi_frontend_domain: "locahost:3001" 
@@ -78,8 +87,9 @@ kpi_cors_whitelist:
 kpi_wsgi_module: kobo.wsgi:application
 kpi_wsgi_processes: 12
 kpi_wsgi_env: "HTTPS=on"
-kpi_pid_dir: "/var/run/{{ kpi_service_name }}"
-kpi_pid_file: "{{ kpi_pid_dir }}/{{ kpi_service_name }}.pid"
+kpi_pid_socket_dir: "/var/run/{{ kpi_service_name }}"
+kpi_pid_file: "{{ kpi_pid_socket_dir }}/{{ kpi_service_name }}.pid"
+kpi_socket_file: "{{ kpi_pid_socket_dir }}/{{ kpi_service_name }}.socket"
 kpi_enable_https: true
 kpi_wsgi_enable_threads: false
 kpi_enable_monitoring: true
@@ -88,3 +98,12 @@ kpi_collectd_scripts:
 kpi_monit_scripts:
   - uwsgi
 kpi_celery_app: "kpi.kpi_celery:app"
+kpi_django_pip_packages:
+  - uwsgi
+  - PyJWT==1.4.0
+
+kpi_django_enable_celery: false
+kpi_uwsgi_total_memory_limit: 1024
+
+kpi_raven_dsn: ""
+kpi_raven_js_dsn: "{{ kpi_raven_dsn }}"

@@ -10,3 +10,6 @@ Icon
 .vagrant
 test
 *.pyc
+.vscode/
+roles/*
+*.log

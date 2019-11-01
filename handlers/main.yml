@@ -1,1 +1,6 @@
 ---
+- name: restart_service
+  service:
+    name: "{{ kpi_service_name }}"
+    state: restarted
+    enabled: true

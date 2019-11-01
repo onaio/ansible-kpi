@@ -1,0 +1,34 @@
+- name: Install Node Version Manager
+  include_role:
+    name: onaio.nvm
+  vars:
+    nvm_user: "{{ kpi_system_user }}"
+    nvm_group: "{{ kpi_system_group }}"
+    nvm_node_version: "{{ kpi_nvm_node_version }}"
+    nvm_install_path: "{{ kpi_nvm_install_path }}"
+    nvm_node_dir: "{{ kpi_nvm_node_dir }}"
+    nvm_npm_path: "{{ kpi_nvm_npm_path }}"
+    nvm_version: "{{ kpi_nvm_version }}"
+
+- name: Install npm global packages
+  npm:
+    executable: "{{ kpi_nvm_npm_path }}"
+    global: true
+    name: "{{ item }}"
+  with_items: "{{ kpi_npm_requirements }}"
+  environment:
+    PATH: "{{ kpi_nvm_node_dir }}/bin:{{ ansible_env.PATH }}"
+  notify:
+    - restart_service
+
+- name: Install npm dependencies in package.json # noqa 301
+  command: "{{ kpi_nvm_npm_path }} install"
+  become: true
+  become_user: "{{ kpi_system_user }}"
+  args:
+    chdir: "{{ kpi_checkout_path }}"
+  environment:
+    PATH: "{{ kpi_nvm_node_dir }}/bin:{{ ansible_env.PATH }}"
+    HOME: "{{ kpi_system_user_home }}"
+  notify:
+    - restart_service

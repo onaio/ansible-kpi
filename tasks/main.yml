@@ -1,28 +1,18 @@
 ---
-- name: Install npm global packages # noqa 301
-  command: "{{  kpi_nvm_npm_path }} install -g {{ item }}"
-  with_items: "{{ kpi_npm_requirements }}"
-  environment:
-    PATH: "{{ kpi_nvm_node_dir }}/bin:{{ ansible_env.PATH }}"
-  notify:
-    - restart_service
+- name: Add KPI System User
+  user:
+    name: "{{ kpi_nvm_user }}"
+    shell: /bin/bash
+    group: "{{ kpi_system_group }}"
+    force: yes
+    append: yes
+    createhome: yes
+    home: "{{ kpi_system_user_home }}"
 
-- name: Install npm dependencies in package.json
-  npm:
-    executable: "{{  kpi_nvm_npm_path }}"
-    path: ""
-  ignore_errors: yes
-  environment:
-    PATH: "{{ kpi_nvm_node_dir }}/bin:{{ ansible_env.PATH }}"
-  notify:
-    - restart_service
-
-# adding the following task because sometimes error in 
-# https://github.com/sass/node-sass/issues/1579 is triggered
-- name: Re-install node-sass # noqa 301
-  command: "{{  kpi_nvm_npm_path }} rebuild node-sass"
-  environment:
-    PATH: "{{ kpi_nvm_node_dir }}/bin:{{ ansible_env.PATH }}"
+- name: Install NVM and Global Node Packages
+  include_tasks: install-nvm.yml
+  tags:
+   - nvm
 
 - name: Copy client-side config file
   template:
@@ -31,7 +21,7 @@
     mode: 0644
 
 - name: Build client code # noqa 301
-  command: "{{ kpi_grunt_path }} copy && {{  kpi_nvm_npm_path }} run build-production"
+  command: "{{ kpi_nvm_npm_path }} run copy-fonts && {{  kpi_nvm_npm_path }} run build"
   args:
     chdir: "{{ kpi_checkout_path }}"
   environment:
@@ -39,6 +29,13 @@
     HOME: "{{ kpi_system_user_home }}"
   notify:
     - restart_service
+
+- name: Patch libgeos.py file for updated regex
+  patch:
+    src: templates/django_virtualenv_dir/site-packages/django/contrib/gis/geos/libgeos.py
+    dest: "{{ kpi_venv_path }}/local/lib/python2.7/site-packages/django/contrib/gis/geos/libgeos.py"
+    basedir: "{{ kpi_checkout_path }}"
+
 
 - name: syncdb, migrate and collect static files
   django_manage:
@@ -49,3 +46,10 @@
   with_items: "{{ kpi_django_setup_commands }}"
   notify:
     - restart_service
+
+- name: Change ownership of all the KPI files
+  file:
+    path: "{{ kpi_checkout_path }}"
+    owner: "{{ kpi_system_user }}"
+    group: "{{ kpi_system_group }}"
+    recurse: true

@@ -9,37 +9,20 @@ galaxy_info:
     - name: Ubuntu
       versions:
         - 16.04
-        - 18.04
   galaxy_tags:
     - kpi
     - formbuilder
     - kobotoolbox
 
 dependencies:
-  - role: onaio.collectd
-    collectd_scripts: "{{ kpi_collectd_scripts }}"
-    collectd_deployed_app_name: "{{ kpi_service_name }}"
-    collectd_deployed_app_version: "{{ kpi_git_branch }}"
-    when: kpi_enable_monitoring
-
-  - role: onaio.monit
-    monit_scripts: "{{ kpi_monit_scripts }}"
-    when: kpi_enable_monitoring
-
-  - role: onaio.nvm
-    nvm_node_version: "{{ kpi_nvm_node_version }}"
-    nvm_install_path: "{{ kpi_nvm_install_path }}"
-    nvm_node_dir: "{{ kpi_nvm_node_dir }}"
-    nvm_npm_path: "{{ kpi_nvm_npm_path }}"
-
   - role: onaio.django
     django_system_user: "{{ kpi_system_user }}"
     django_system_group: "{{ kpi_system_group }}"
-    django_system_user_home: "{{ kpi_system_home }}"
+    django_system_user_home: "{{ kpi_system_user_home }}"
     django_git_url: "{{ kpi_git_url }}"
-    django_git_version: "master"
+    django_git_version: "{{ kpi_git_branch }}"
     django_git_key: "{{ kpi_git_key }}"
-    django_git_key_ssh_file: "{{ kpi_git_ssh_file }}"
+    django_git_key_ssh_file: "{{ kpi_git_key_ssh_file }}"
     django_git_key_filename: "{{ kpi_git_key_filename }}"
     django_copy_key_from_file: "{{ kpi_copy_key_from_file }}"
     django_remove_git_key: "{{ kpi_remove_git_key }}"
@@ -54,8 +37,31 @@ dependencies:
     django_static_path: "{{ kpi_static_path }}"
     django_settings_module: "{{ kpi_settings_app_name }}"
     django_settings_template_path: "{{ kpi_settings_template_path }}"
+    django_local_settings_path: "{{ kpi_local_settings_path }}"
     django_wsgi_module: "{{ kpi_wsgi_module }}"
     django_wsgi_processes: "{{ kpi_wsgi_processes }}"
     django_wsgi_env: "{{ kpi_wsgi_env }}"
     django_wsgi_enable_threads: "{{ kpi_wsgi_enable_threads }}"
     django_celery_app: "{{ kpi_celery_app }}"
+    django_apt_python_ppa: "{{ kpi_django_apt_python_ppa }}"
+    django_pip_paths: "{{ kpi_pip_paths }}"
+    django_pip_packages: "{{ kpi_django_pip_packages }}"
+    django_enable_celery: "{{ kpi_django_enable_celery }}"
+    django_venv_path: "{{ kpi_venv_path }}"
+    django_pid_socks_dir:  "{{ kpi_pid_socket_dir }}"
+    django_pid_file: "{{ kpi_pid_file }}"
+    django_wsgi_socket: "{{ kpi_socket_file }}"
+
+  - role: onaio.collectd
+    collectd_scripts: "{{ kpi_collectd_scripts }}"
+    collectd_deployed_app_name: "{{ kpi_service_name }}"
+    collectd_deployed_app_version: "{{ kpi_git_branch }}"
+    when: kpi_enable_monitoring
+
+  - role: onaio.monit
+    monit_scripts: "{{ kpi_monit_scripts }}"
+    service_name: "{{ kpi_service_name }}"
+    pid_file: "{{ kpi_pid_file }}"
+    uses_systemd: true
+    uwsgi_total_memory_limit: "{{ kpi_uwsgi_total_memory_limit }}"
+    when: kpi_enable_monitoring
