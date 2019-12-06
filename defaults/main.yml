@@ -91,7 +91,9 @@ kpi_pid_socket_dir: "/var/run/{{ kpi_service_name }}"
 kpi_pid_file: "{{ kpi_pid_socket_dir }}/{{ kpi_service_name }}.pid"
 kpi_socket_file: "{{ kpi_pid_socket_dir }}/{{ kpi_service_name }}.socket"
 kpi_enable_https: true
-kpi_wsgi_enable_threads: false
+kpi_wsgi_enable_threads: true
+kpi_service_group: "www-data"
+kpi_wsgi_group: "www-data"
 kpi_enable_monitoring: true
 kpi_collectd_scripts:
   - unixsock
