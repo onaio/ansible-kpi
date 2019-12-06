@@ -25,7 +25,7 @@ kpi_system_requirements:
   - gdal-bin
 kpi_npm_requirements:
   - webpack
-kpi_django_setup_commands: 
+kpi_django_setup_commands:
   - syncdb --noinput
   - migrate --noinput
   - collectstatic --noinput
@@ -80,7 +80,7 @@ kpi_log_path: "/var/log/{{ kpi_service_name }}"
 kpi_cors_origin_whitelist: []
 
 # TODO: Add documentation for this config
-kpi_frontend_domain: "locahost:3001" 
+kpi_frontend_domain: "locahost:3001"
 kpi_frontend_login_url: "http://{{ kpi_frontend_domain }}/login"
 kpi_cors_whitelist:
   - "{{ kpi_frontend_domain }}"
@@ -107,3 +107,7 @@ kpi_uwsgi_total_memory_limit: 1024
 
 kpi_raven_dsn: ""
 kpi_raven_js_dsn: "{{ kpi_raven_dsn }}"
+django_environment_vars:
+  ENKETO_URL: "{{ kpi_enketo_url }}"
+  ENKETO_VERSION: "Express"
+  DJANGO_DEBUG: "False"
