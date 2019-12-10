@@ -51,6 +51,8 @@ dependencies:
     django_pid_socks_dir:  "{{ kpi_pid_socket_dir }}"
     django_pid_file: "{{ kpi_pid_file }}"
     django_wsgi_socket: "{{ kpi_socket_file }}"
+    django_service_group: "{{ kpi_service_group }}"
+    django_wsgi_group: "{{ kpi_wsgi_group }}"
 
   - role: onaio.collectd
     collectd_scripts: "{{ kpi_collectd_scripts }}"
