@@ -114,4 +114,4 @@ django_environment_vars:
   ENKETO_VERSION: "Express"
   DJANGO_DEBUG: "False"
 
-kpi_ona_title: "Ona"
+web_page_title: "Ona"
