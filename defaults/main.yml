@@ -113,3 +113,5 @@ django_environment_vars:
   ENKETO_URL: "{{ kpi_enketo_url }}"
   ENKETO_VERSION: "Express"
   DJANGO_DEBUG: "False"
+
+kpi_ona_title: "Ona"
