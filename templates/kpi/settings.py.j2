@@ -66,8 +66,10 @@ CORS_MODEL = 'external_integrations.CorsModel'
 
 CORS_ORIGIN_WHITELIST = (
     '127.0.0.1:3001',
+    '127.0.0.1:3000',
     'localhost:8000',
     'localhost:3001',
+    'localhost:3000',
 {% for origin in kpi_cors_origin_whitelist %}
     '{{ origin }}',
 {% endfor %}
