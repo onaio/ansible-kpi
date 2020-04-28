@@ -33,7 +33,7 @@
 - name: Patch libgeos.py file for updated regex
   patch:
     src: templates/django_virtualenv_dir/site-packages/django/contrib/gis/geos/libgeos.py
-    dest: "{{ kpi_venv_path }}/local/lib/python2.7/site-packages/django/contrib/gis/geos/libgeos.py"
+    dest: "{{ kpi_venv_path }}/lib/python2.7/site-packages/django/contrib/gis/geos/libgeos.py"
     basedir: "{{ kpi_checkout_path }}"
 
 
