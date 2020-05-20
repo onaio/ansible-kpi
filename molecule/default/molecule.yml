@@ -3,8 +3,8 @@ dependency:
   name: galaxy
 driver:
   name: docker
-lint:
-  name: yamllint
+lint: |
+  yamllint .
 platforms:
   - name: ubuntu-16.04
     image: solita/ubuntu-systemd:16.04
@@ -25,9 +25,9 @@ scenario:
     - destroy
 provisioner:
   name: ansible
-  lint:
-    name: ansible-lint
+  lint: |
+    ansible-lint
 verifier:
   name: testinfra
-  lint:
-    name: flake8
+  lint: |
+    flake8
