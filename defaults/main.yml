@@ -15,7 +15,7 @@ kpi_system_requirements:
   - python-pip
   - python-psycopg2
   - python-setuptools
-  - python-software-properties
+  - software-properties-common
   - python-virtualenv
   - python2.7-dev
   - ttfautohint
