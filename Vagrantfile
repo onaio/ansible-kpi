@@ -3,7 +3,7 @@
 
 Vagrant.configure("2") do |config|
   config.vm.provision "ansible_local" do |ansible|
-    ansible.playbook = "vagranttest.yml"
+    ansible.playbook = "molecule/default/tests/vagranttest.yml"
     ansible.galaxy_role_file = "molecule/default/requirements.yml"
     ansible.verbose = "v"
   end
@@ -13,7 +13,7 @@ Vagrant.configure("2") do |config|
     v.cpus = 1
   end
 
-  config.vm.network "forwarded_port", guest: 8080, host: 8888
+  config.vm.network "forwarded_port", guest: 8080, host: 8889
   config.vm.box = "ubuntu/xenial64"
   config.ssh.forward_agent = true
 end
