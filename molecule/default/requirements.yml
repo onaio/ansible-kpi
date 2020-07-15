@@ -22,3 +22,11 @@
 - name: onaio.gpg-import
   src: https://github.com/onaio/ansible-gpg-import.git
   scm: git
+
+- name: onaio.ssl-certificate
+  src: https://github.com/onaio/ansible-ssl-certificate.git
+  scm: git
+
+- src: https://github.com/ANXS/postgresql
+  name: ANXS.postgresql
+  version: f326a92b02e63224a65076565cc9873768faee25
