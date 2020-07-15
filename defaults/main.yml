@@ -38,7 +38,7 @@ kpi_system_user_home: "/home/{{ kpi_system_user }}"
 kpi_system_user: "kpi"
 kpi_system_group: "{{ kpi_system_user }}"
 kpi_git_url: "https://github.com/onaio/kpi.git"
-kpi_git_key:
+kpi_git_key_content:
 kpi_git_key_ssh_file:
 kpi_git_key_filename: id_ed25519
 kpi_copy_key_from_file: false
