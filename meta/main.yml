@@ -21,7 +21,7 @@ dependencies:
     django_system_user_home: "{{ kpi_system_user_home }}"
     django_git_url: "{{ kpi_git_url }}"
     django_git_version: "{{ kpi_git_branch }}"
-    django_git_key: "{{ kpi_git_key }}"
+    django_git_key_content: "{{ kpi_git_key_content }}"
     django_git_key_ssh_file: "{{ kpi_git_key_ssh_file }}"
     django_git_key_filename: "{{ kpi_git_key_filename }}"
     django_copy_key_from_file: "{{ kpi_copy_key_from_file }}"
@@ -53,6 +53,7 @@ dependencies:
     django_wsgi_socket: "{{ kpi_socket_file }}"
     django_service_group: "{{ kpi_service_group }}"
     django_wsgi_group: "{{ kpi_wsgi_group }}"
+    django_python_packages: "{{ kpi_python_packages }}"
 
   - role: onaio.collectd
     collectd_scripts: "{{ kpi_collectd_scripts }}"

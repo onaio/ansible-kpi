@@ -38,7 +38,7 @@ kpi_system_user_home: "/home/{{ kpi_system_user }}"
 kpi_system_user: "kpi"
 kpi_system_group: "{{ kpi_system_user }}"
 kpi_git_url: "https://github.com/onaio/kpi.git"
-kpi_git_key:
+kpi_git_key_content:
 kpi_git_key_ssh_file:
 kpi_git_key_filename: id_ed25519
 kpi_copy_key_from_file: false
@@ -63,6 +63,9 @@ kpi_django_secret_key: "random-string"
 kpi_jwt_secret_key: "random-string"
 kpi_formbuilder_cookie: "__kpi_formbuilder"
 kpi_django_apt_python_ppa: ""
+kpi_python_packages:
+  - "{{ kpi_python_version }}"
+  - "{{ kpi_python_version }}-dev"
 
 # Use the exact anonymous_user_id as the one set on the onadata/formhub/kobocat app.
 kpi_anonymous_user_id: "-1"

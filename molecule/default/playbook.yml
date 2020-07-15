@@ -25,6 +25,10 @@
         - libgeos-c1v5
         - "postgresql-{{ postgresql_version }}-postgis-{{ postgresql_ext_postgis_version }}"
         - "postgresql-{{ postgresql_version }}-postgis-{{ postgresql_ext_postgis_version }}-scripts"
+      postgresql_enable_ssl: true
+      postgresql_ssl_domain: "db.example.com"
+      postgresql_ssl_ca_key: "{{ lookup('file', 'ssl/root.key') }}"
+      postgresql_ssl_ca_cert: "{{ lookup('file', 'ssl/root.crt') }}"
     - role: ansible-kpi
       kpi_pgsql_db: kpi
       kpi_pgsql_user: kpi
