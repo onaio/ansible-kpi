@@ -53,6 +53,7 @@ dependencies:
     django_wsgi_socket: "{{ kpi_socket_file }}"
     django_service_group: "{{ kpi_service_group }}"
     django_wsgi_group: "{{ kpi_wsgi_group }}"
+    django_python_packages: "{{ kpi_python_packages }}"
 
   - role: onaio.collectd
     collectd_scripts: "{{ kpi_collectd_scripts }}"
