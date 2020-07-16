@@ -615,6 +615,8 @@ LOGGING = {
     }
 }
 
+RAVEN_FRONTEND_ENV = "{{ kpi_raven_frontend_env }}"
+
 ''' Sentry configuration '''
 RAVEN_DSN = "{{ kpi_raven_dsn }}"
 RAVEN_JS_DSN = "{{ kpi_raven_js_dsn }}"
@@ -625,6 +627,7 @@ if RAVEN_DSN:
     )
     RAVEN_CONFIG = {
         'dsn':RAVEN_DSN,
+        'environment': '{{ kpi_raven_backend_env }}'
     }
 
     # Set the `server_name` attribute. See https://docs.sentry.io/hosted/clients/python/advanced/

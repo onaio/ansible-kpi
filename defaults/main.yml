@@ -118,3 +118,5 @@ django_environment_vars:
   DJANGO_DEBUG: "False"
 
 web_page_title: "Ona"
+kpi_raven_frontend_env: ""
+kpi_raven_backend_env: ""
