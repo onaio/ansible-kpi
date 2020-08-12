@@ -102,7 +102,8 @@ kpi_collectd_scripts:
   - unixsock
 kpi_monit_scripts:
   - uwsgi
-kpi_celery_app: "kpi.kpi_celery:app"
+kpi_celery_app: "kobo"
+kpi_celeryd_opts: "--exclude-queues=sync_kobocat_xforms_queue"
 kpi_django_pip_packages:
   - uwsgi
   - PyJWT==1.4.0

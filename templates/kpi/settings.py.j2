@@ -496,7 +496,7 @@ CELERY_BROKER_TRANSPORT_OPTIONS = {
     "visibility_timeout": 60 * (10 ** 3)  # Longest ETA for RestService
 }
 
-CELERY_TASK_DEFAULT_QUEUE = "kpi_queue"
+CELERY_DEFAULT_QUEUE = "kpi_queue"
 
 if 'KOBOCAT_URL' in os.environ:
     SYNC_KOBOCAT_XFORMS = (os.environ.get('SYNC_KOBOCAT_XFORMS', 'True') == 'True')
@@ -521,7 +521,7 @@ RabbitMQ queue creation:
     rabbitmqctl set_permissions -p kpi kpi '.*' '.*' '.*'
 See http://celery.readthedocs.org/en/latest/getting-started/brokers/rabbitmq.html#setting-up-rabbitmq.
 '''
-CELERY_BROKER_URL = os.environ.get('KPI_BROKER_URL', 'redis://localhost:6379/1')
+BROKER_URL = os.environ.get('KPI_BROKER_URL', 'redis://localhost:6379/1')
 
 # http://django-registration-redux.readthedocs.org/en/latest/quickstart.html#settings
 ACCOUNT_ACTIVATION_DAYS = 3

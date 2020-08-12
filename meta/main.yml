@@ -43,6 +43,7 @@ dependencies:
     django_wsgi_env: "{{ kpi_wsgi_env }}"
     django_wsgi_enable_threads: "{{ kpi_wsgi_enable_threads }}"
     django_celery_app: "{{ kpi_celery_app }}"
+    django_celeryd_opts: "{{ kpi_celeryd_opts }}"
     django_apt_python_ppa: "{{ kpi_django_apt_python_ppa }}"
     django_pip_paths: "{{ kpi_pip_paths }}"
     django_pip_packages: "{{ kpi_django_pip_packages }}"
