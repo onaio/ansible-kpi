@@ -64,9 +64,12 @@
     django_wsgi_socket: "{{ kpi_socket_file }}"
     django_service_group: "{{ kpi_service_group }}"
     django_wsgi_group: "{{ kpi_wsgi_group }}"
+    django_celeryd_opts: "{{ kpi_celeryd_opts }}"
+    django_manage_services: "{{ kpi_django_manage_services }}"
+    django_celeryd_service_name: "celeryd-{{ django_service_name }}"
 
   gather_facts: true
   become: true
   roles:
       - name: "kpi"
-        role: ../..
+        role: ../../../..
