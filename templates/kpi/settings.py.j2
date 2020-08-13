@@ -463,7 +463,7 @@ ENKETO_SURVEY_ENDPOINT = 'api/v2/survey/all'
 
 CELERY_TIMEZONE = "UTC"
 
-CELERY_TASK_ALWAYS_EAGER = True
+CELERY_TASK_ALWAYS_EAGER = False
 # if os.environ.get('SKIP_CELERY', 'False') == 'True':
 #     # helpful for certain debugging
 #     CELERY_TASK_ALWAYS_EAGER = True
