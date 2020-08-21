@@ -43,10 +43,10 @@ dependencies:
     django_wsgi_env: "{{ kpi_wsgi_env }}"
     django_wsgi_enable_threads: "{{ kpi_wsgi_enable_threads }}"
     django_celery_app: "{{ kpi_celery_app }}"
+    django_celeryd_opts: "{{ kpi_celeryd_opts }}"
     django_apt_python_ppa: "{{ kpi_django_apt_python_ppa }}"
     django_pip_paths: "{{ kpi_pip_paths }}"
     django_pip_packages: "{{ kpi_django_pip_packages }}"
-    django_enable_celery: "{{ kpi_django_enable_celery }}"
     django_venv_path: "{{ kpi_venv_path }}"
     django_pid_socks_dir:  "{{ kpi_pid_socket_dir }}"
     django_pid_file: "{{ kpi_pid_file }}"
@@ -54,6 +54,7 @@ dependencies:
     django_service_group: "{{ kpi_service_group }}"
     django_wsgi_group: "{{ kpi_wsgi_group }}"
     django_python_packages: "{{ kpi_python_packages }}"
+    django_manage_services: "{{ kpi_django_manage_services }}"
 
   - role: onaio.collectd
     collectd_scripts: "{{ kpi_collectd_scripts }}"

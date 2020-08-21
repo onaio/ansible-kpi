@@ -48,7 +48,7 @@ kpi_python_version: "python2.7"
 kpi_checkout_path: "{{ kpi_versioned_path }}/{{ kpi_git_branch }}"
 kpi_app_path: "{{ kpi_system_user_home }}/app"
 kpi_versioned_path: "{{ kpi_app_path }}-versioned"
-kpi_git_branch: master
+kpi_git_branch: ona-custom-changes
 kpi_service_name: "{{ kpi_system_user }}"
 kpi_venv_path: "{{ kpi_system_user_home }}/.virtualenvs/{{ kpi_service_name }}"
 kpi_nvm_install_path: "{{ kpi_system_user_home }}/.nvm"
@@ -102,12 +102,14 @@ kpi_collectd_scripts:
   - unixsock
 kpi_monit_scripts:
   - uwsgi
-kpi_celery_app: "kpi.kpi_celery:app"
+kpi_celery_app: "kobo"
+kpi_celeryd_opts: "--exclude-queues=sync_kobocat_xforms_queue"
 kpi_django_pip_packages:
   - uwsgi
   - PyJWT==1.4.0
 
-kpi_django_enable_celery: false
+kpi_django_enable_celery: true
+kpi_django_manage_services: true
 kpi_uwsgi_total_memory_limit: 1024
 
 kpi_raven_dsn: ""
