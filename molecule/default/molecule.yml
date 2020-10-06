@@ -6,8 +6,9 @@ driver:
 lint: |
   yamllint .
 platforms:
-  - name: ubuntu-16.04
-    image: solita/ubuntu-systemd:16.04
+  - name: kpi-ubuntu-18.04
+    image: solita/ubuntu-systemd:18.04
+    dockerfile: Dockerfile.j2
     privileged: true
     command: /sbin/init
 scenario:

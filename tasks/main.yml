@@ -30,11 +30,6 @@
   notify:
     - restart_service
 
-- name: Patch libgeos.py file for updated regex
-  patch:
-    src: templates/django_virtualenv_dir/site-packages/django/contrib/gis/geos/libgeos.py
-    dest: "{{ kpi_venv_path }}/lib/python2.7/site-packages/django/contrib/gis/geos/libgeos.py"
-
 - name: syncdb, migrate and collect static files
   django_manage:
     command: "{{ item }}"

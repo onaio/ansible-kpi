@@ -2,12 +2,6 @@
 - name: Pre-install stuff
   hosts: all
   tasks:
-    - name: Install python 2 if not there
-      raw: |
-        test -e /usr/bin/python3 || \
-        (apt -y update && apt install -y  python-minimal)
-      register: output
-      changed_when: output.stdout|trim() != ""
     - name: Install sudo if not there
       raw: |
         test -e /usr/bin/sudo || apt install -y sudo
@@ -20,10 +14,10 @@
   hosts: all
   vars:
     # postgres
-    kpi_anonymous_user_id: "-1"
-    kpi_pgsql_db: "onadata"
+    kpi_anonymous_user_id: "1"
+    kpi_pgsql_db: "kpi"
     kpi_pgsql_user: "kpi"
-    kpi_pgsql_password: "random_password"
+    kpi_pgsql_password: "kpi"
     kpi_pgsql_host: "localhost"
     kpi_pgsql_port: 5432
     # django

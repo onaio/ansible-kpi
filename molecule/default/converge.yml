@@ -19,6 +19,9 @@
         - db: kpi
           extensions:
             - postgis
+            - postgis_topology
+            - fuzzystrmatch
+            - postgis_tiger_geocoder
       postgresql_ext_install_postgis: true
       postgresql_ext_postgis_version: "2.3"
       postgresql_ext_postgis_deps:
