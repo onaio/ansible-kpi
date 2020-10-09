@@ -1,0 +1,12 @@
+ 
+---
+- name: Prepare
+  hosts: all
+  tasks:
+    - name: Make sure system dependencies are installed
+      apt:
+        pkg:
+          - gpg
+          - python3-psycopg2
+        state: present
+      when: ansible_lsb.major_release|int > 16
