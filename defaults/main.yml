@@ -25,8 +25,6 @@ kpi_system_requirements:
 kpi_npm_requirements:
   - webpack
 kpi_django_setup_commands:
-  # - syncdb --noinput
-  # - migrate --noinput
   - collectstatic --noinput
   - compilemessages
 kpi_pip_paths: "{{ kpi_checkout_path }}/dependencies/pip/external_services.txt"
@@ -61,7 +59,6 @@ kpi_static_path: "{{ kpi_checkout_path }}/jsapp"
 kpi_django_secret_key: "random-string"
 kpi_jwt_secret_key: "random-string"
 kpi_formbuilder_cookie: "__kpi_formbuilder"
-# kpi_django_apt_python_ppa: "gnupg, python3-apt"
 kpi_django_apt_python_ppa: ""
 kpi_python_packages:
   - "{{ kpi_python_version }}"
@@ -74,7 +71,7 @@ kpi_pgsql_user: "kpi"
 kpi_pgsql_password: "kpi"
 kpi_pgsql_host: "localhost"
 kpi_pgsql_port: 5432
-ona_pgsql_db: "onadata"
+ona_pgsql_db: "ona"
 ona_pgsql_user: "onadata"
 ona_pgsql_password: "onadata"
 ona_pgsql_host: "localhost"
@@ -85,12 +82,11 @@ kpi_enketo_url: "http://localhost:8005"
 kpi_enketo_api_token: "qwertyuiop"
 kpi_broker_url: 'redis://localhost:6379/1'
 kpi_log_path: "/var/log/{{ kpi_service_name }}"
-kpi_cors_origin_whitelist: []
 
 # TODO: Add documentation for this config
 kpi_frontend_domain: "http://locahost:3001"
 kpi_frontend_login_url: "http://{{ kpi_frontend_domain }}/login"
-kpi_cors_whitelist:
+kpi_cors_origin_whitelist:
   - "{{ kpi_frontend_domain }}"
   - 'http://localhost:3000'
   - 'http://localhost:3001'
