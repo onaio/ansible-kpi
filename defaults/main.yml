@@ -12,12 +12,11 @@ kpi_system_requirements:
   - libxml2-dev
   - libxslt1-dev
   - python-celery
-  - python-pip
-  - python-psycopg2
-  - python-setuptools
+  - python3-pip
+  - python3-psycopg2
+  - python3-setuptools
   - software-properties-common
-  - python-virtualenv
-  - python2.7-dev
+  - virtualenv
   - ttfautohint
   - zlib1g-dev
   - binutils
@@ -26,8 +25,6 @@ kpi_system_requirements:
 kpi_npm_requirements:
   - webpack
 kpi_django_setup_commands:
-  - syncdb --noinput
-  - migrate --noinput
   - collectstatic --noinput
   - compilemessages
 kpi_pip_paths: "{{ kpi_checkout_path }}/dependencies/pip/external_services.txt"
@@ -43,12 +40,12 @@ kpi_git_key_ssh_file:
 kpi_git_key_filename: id_ed25519
 kpi_copy_key_from_file: false
 kpi_remove_git_key: true
-kpi_python_source_version: 2.7
-kpi_python_version: "python2.7"
+kpi_python_source_version: "3"
+kpi_python_version: python{{ kpi_python_source_version }}
 kpi_checkout_path: "{{ kpi_versioned_path }}/{{ kpi_git_branch }}"
 kpi_app_path: "{{ kpi_system_user_home }}/app"
 kpi_versioned_path: "{{ kpi_app_path }}-versioned"
-kpi_git_branch: ona-custom-changes
+kpi_git_branch: kpi_2.0
 kpi_service_name: "{{ kpi_system_user }}"
 kpi_venv_path: "{{ kpi_system_user_home }}/.virtualenvs/{{ kpi_service_name }}"
 kpi_nvm_install_path: "{{ kpi_system_user_home }}/.nvm"
@@ -69,24 +66,40 @@ kpi_python_packages:
 
 # Use the exact anonymous_user_id as the one set on the onadata/formhub/kobocat app.
 kpi_anonymous_user_id: "-1"
-kpi_pgsql_db: "onadata"
+kpi_pgsql_db: "kpi"
 kpi_pgsql_user: "kpi"
-kpi_pgsql_password: "random_password"
+kpi_pgsql_password: "kpi"
 kpi_pgsql_host: "localhost"
 kpi_pgsql_port: 5432
+ona_pgsql_db: "ona"
+ona_pgsql_user: "onadata"
+ona_pgsql_password: "onadata"
+ona_pgsql_host: "localhost"
+ona_pgsql_port: 5432
 kpi_google_analytics_token: "random_string"
 kpi_kobocat_url: "http://localhost:8002"
 kpi_enketo_url: "http://localhost:8005"
 kpi_enketo_api_token: "qwertyuiop"
-kpi_broker_url: "amqp://{{ kpi_system_user }}:{{ kpi_system_user }}@localhost:5672"
+kpi_broker_url: 'redis://localhost:6379/1'
 kpi_log_path: "/var/log/{{ kpi_service_name }}"
-kpi_cors_origin_whitelist: []
 
 # TODO: Add documentation for this config
-kpi_frontend_domain: "locahost:3001"
+kpi_frontend_domain: "http://locahost:3001"
 kpi_frontend_login_url: "http://{{ kpi_frontend_domain }}/login"
-kpi_cors_whitelist:
+kpi_cors_origin_whitelist:
   - "{{ kpi_frontend_domain }}"
+  - 'http://localhost:3000'
+  - 'http://localhost:3001'
+  - 'http://localhost:4000'
+  - 'http://0.0.0.0:3000'
+  - 'http://127.0.0.1:3000'
+  - 'http://127.0.0.1:3001'
+  - 'http://127.0.0.1:4000'
+  - 'http://localhost:8000'
+  - 'http://localhost:8080'
+  - 'http://127.0.0.1:8080'
+  - 'http://localhost:8005'
+
 kpi_wsgi_module: kobo.wsgi:application
 kpi_wsgi_processes: 12
 kpi_wsgi_env: "HTTPS=on"

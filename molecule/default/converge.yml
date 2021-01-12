@@ -2,37 +2,10 @@
 - name: Converge
   hosts: all
   roles:
-    - role: onaio.postgresql
-      postgresql_backup_enabled: false
-      postgresql_version: 9.6
-      postgresql_users:
-          - name: kpi
-            pass: kpi
-            encrypted: true
-      postgresql_databases:
-        - name: kpi
-          owner: kpi
-          encoding: "UTF-8"
-          hstore: true
-          gis: true
-      postgresql_database_extensions:
-        - db: kpi
-          extensions:
-            - postgis
-      postgresql_ext_install_postgis: true
-      postgresql_ext_postgis_version: "2.3"
-      postgresql_ext_postgis_deps:
-        - libgeos-c1v5
-        - "postgresql-{{ postgresql_version }}-postgis-{{ postgresql_ext_postgis_version }}"
-        - "postgresql-{{ postgresql_version }}-postgis-{{ postgresql_ext_postgis_version }}-scripts"
-      postgresql_enable_ssl: true
-      postgresql_ssl_domain: "db.example.com"
-      postgresql_ssl_ca_key: "{{ lookup('file', 'ssl/root.key') }}"
-      postgresql_ssl_ca_cert: "{{ lookup('file', 'ssl/root.crt') }}"
     - role: ansible-kpi
       kpi_pgsql_db: kpi
       kpi_pgsql_user: kpi
       kpi_pgsql_password: kpi
       kpi_enable_monitoring: false
       kpi_git_url: "https://github.com/onaio/kpi.git"
-      kpi_git_branch: "ona-custom-changes"
+      kpi_git_branch: "kpi_2.0"

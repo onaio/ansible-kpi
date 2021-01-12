@@ -6,22 +6,16 @@ import multiprocessing
 import os
 import subprocess
 
+from celery.schedules import crontab
 import django.conf.locale
 from django.conf import global_settings
 from django.conf.global_settings import LOGIN_URL
-from django.core.urlresolvers import reverse_lazy
+from django.urls import reverse_lazy
 from django.utils.translation import get_language_info
 import dj_database_url
 from pymongo import MongoClient
 
-EXTRA_LANG_INFO = {
-    'ku': {
-        'bidi': True,
-        'code': 'ku',
-        'name': 'Kurdish',
-        'name_local': 'كوردی',
-    },
-}
+from .static_lists import EXTRA_LANG_INFO
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -60,16 +54,7 @@ if os.environ.get('CSRF_COOKIE_DOMAIN'):
     SESSION_COOKIE_DOMAIN = CSRF_COOKIE_DOMAIN
     SESSION_COOKIE_NAME = 'kobonaut'
 
-# Instances of this model will be treated as allowed origins; see
-# https://github.com/ottoyiu/django-cors-headers#cors_model
-CORS_MODEL = 'external_integrations.CorsModel'
-
 CORS_ORIGIN_WHITELIST = (
-    '127.0.0.1:3001',
-    '127.0.0.1:3000',
-    'localhost:8000',
-    'localhost:3001',
-    'localhost:3000',
 {% for origin in kpi_cors_origin_whitelist %}
     '{{ origin }}',
 {% endfor %}
@@ -115,14 +100,15 @@ LOGIN_REDIRECT_URL = '/'
 # apps both define templates for the same view, the first app listed receives
 # precedence
 INSTALLED_APPS = (
-    'django.contrib.auth',
+    # Always put `contenttypes` before `auth`; see
+    # https://code.djangoproject.com/ticket/10827
     'django.contrib.contenttypes',
+    'django.contrib.auth',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'reversion',
     'mptt',
-    'haystack',
     'private_storage',
     'kobo.apps.KpiConfig',
     'hub',
@@ -142,28 +128,28 @@ INSTALLED_APPS = (
     'constance',
     'constance.backends.database',
     'kobo.apps.hook',
+    'django_celery_beat',
     'corsheaders',
     'kobo.apps.external_integrations.ExternalIntegrationsAppConfig',
     'markdownx',
     'kobo.apps.help',
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'corsheaders.middleware.CorsPostCsrfMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    # TODO: Uncomment this when interoperability with dkobo is no longer
-    # needed. See https://code.djangoproject.com/ticket/21649
-    #'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'hub.middleware.OtherFormBuilderRedirectMiddleware',
     'hub.middleware.UsernameInResponseHeaderMiddleware',
-)
+    'django_userforeignkey.middleware.UserForeignKeyMiddleware',
+    'django_request_cache.middleware.RequestCacheMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+]
+
 
 if os.environ.get('DEFAULT_FROM_EMAIL'):
     DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')
@@ -175,30 +161,55 @@ if os.environ.get('DEFAULT_FROM_EMAIL'):
 # must use `constance.config.THE_SETTING` instead of
 # `django.conf.settings.THE_SETTING`
 CONSTANCE_CONFIG = {
-    'REGISTRATION_OPEN': (True, 'Allow new users to register accounts for '
-                                'themselves'),
-    'TERMS_OF_SERVICE_URL': ('http://www.kobotoolbox.org/terms',
-                            'URL for terms of service document'),
-    'PRIVACY_POLICY_URL': ('http://www.kobotoolbox.org/privacy',
-                          'URL for privacy policy'),
-    'SOURCE_CODE_URL': ('https://github.com/kobotoolbox/',
-                        'URL of source code repository. When empty, a link '
-                        'will not be shown in the user interface'),
-    'SUPPORT_URL': (os.environ.get('KOBO_SUPPORT_URL',
-                                   'http://help.kobotoolbox.org/'),
-                    'URL of user support portal. When empty, a link will not '
-                    'be shown in the user interface'),
-    'SUPPORT_EMAIL': (os.environ.get('KOBO_SUPPORT_EMAIL') or
-                        os.environ.get('DEFAULT_FROM_EMAIL',
-                                       'help@kobotoolbox.org'),
-                      'Email address for users to contact, e.g. when they '
-                      'encounter unhandled errors in the application'),
-    'ALLOW_UNSECURED_HOOK_ENDPOINTS': (True,
-                                       'Allow the use of unsecured endpoints for hooks. '
-                                       '(e.g http://hook.example.com)'),
-    'HOOK_MAX_RETRIES': (3,
-                         'Number of times the system will retry '
-                         'to send data to remote server before giving up')
+    'REGISTRATION_OPEN': (
+        False,
+        "Don't Allow new users to register accounts for themselves",
+    ),
+    'TERMS_OF_SERVICE_URL': (
+        'https://ona.io/tos.html',
+        'URL for terms of service document'),
+    'PRIVACY_POLICY_URL': (
+        'https://ona.io/privacy.html',
+        'URL for privacy policy'),
+    'SOURCE_CODE_URL': (
+        'https://github.com/onaio/kpi/',
+        'URL of source code repository. When empty, a link will not be shown '
+        'in the user interface',
+    ),
+    'SUPPORT_EMAIL': (
+        os.environ.get('KOBO_SUPPORT_EMAIL')
+        or os.environ.get('DEFAULT_FROM_EMAIL', 'https://help.ona.io'),
+        'Email address for users to contact, e.g. when they encounter '
+        'unhandled errors in the application',
+    ),
+    'SUPPORT_URL': (
+        os.environ.get('KOBO_SUPPORT_URL', 'https://support@ona.io'),
+        'URL for "KoBoToolbox Help Center"',
+    ),
+    'COMMUNITY_URL': (
+        os.environ.get(
+            'KOBO_COMMUNITY_URL', 'https://community.kobotoolbox.org/'
+        ),
+        'URL for "KoBoToolbox Community Forum"',
+    ),
+    'ALLOW_UNSECURED_HOOK_ENDPOINTS': (
+        True,
+        'Allow the use of unsecured endpoints for hooks. '
+        '(e.g http://hook.example.com)',
+    ),
+    'HOOK_MAX_RETRIES': (
+        3,
+        'Number of times the system will retry to send data to remote server '
+        'before giving up',
+    ),
+    'SSRF_ALLOWED_IP_ADDRESS': (
+        '',
+        'Whitelisted IP addresses to bypass SSRF protection\nOne per line',
+    ),
+    'SSRF_DENIED_IP_ADDRESS': (
+        '',
+        'Blacklisted IP addresses to bypass SSRF protection\nOne per line',
+    ),
 }
 # Tell django-constance to use a database model instead of Redis
 CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
@@ -211,6 +222,9 @@ class DoNotUseRunner(object):
 
 
 TEST_RUNNER = __name__ + '.DoNotUseRunner'
+
+# A flag set by unit tests to bypass KoBoCAT user syncing
+TESTING = True
 
 # used in kpi.models.sitewide_messages
 MARKITUP_FILTER = ('markdown.markdown', {'safe_mode': False})
@@ -236,6 +250,7 @@ ANONYMOUS_USER_ID = {{ kpi_anonymous_user_id }}
 ALLOWED_ANONYMOUS_PERMISSIONS = (
     'kpi.view_collection',
     'kpi.view_asset',
+    'kpi.view_submissions',
 )
 
 # run heavy migration scripts by default
@@ -243,11 +258,6 @@ ALLOWED_ANONYMOUS_PERMISSIONS = (
 SKIP_HEAVY_MIGRATIONS = os.environ.get('SKIP_HEAVY_MIGRATIONS', 'False') == 'True'
 
 # Database
-# https://docs.djangoproject.com/en/1.7/ref/settings/#databases
-# DATABASES = {
-#     'default': dj_database_url.config(default="sqlite:///%s/db.sqlite3" % BASE_DIR),
-#     'kobocat': dj_database_url.config(default="sqlite:///%s/db.sqlite3" % BASE_DIR),
-# }
 
 DATABASES = {
     'default': {
@@ -257,8 +267,14 @@ DATABASES = {
         'PASSWORD': '{{ kpi_pgsql_password }}',
         'HOST': '{{ kpi_pgsql_host }}',
         'PORT': {{ kpi_pgsql_port }},
-        'TEST_CHARSET': 'utf8',
-        'TEST_COLLATION': 'utf8_general_ci',
+    },
+    'kobocat': {
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': '{{ ona_pgsql_db }}',
+        'USER': '{{ ona_pgsql_user }}',
+        'PASSWORD': '{{ ona_pgsql_password }}',
+        'HOST': '{{ ona_pgsql_host }}',
+        'PORT': {{ ona_pgsql_port }},
     }
 }
 
@@ -343,7 +359,7 @@ if os.path.exists(os.path.join(BASE_DIR, 'dkobo', 'jsapp')):
 
 REST_FRAMEWORK = {
     'URL_FIELD_NAME': 'url',
-    'DEFAULT_PAGINATION_CLASS': 'kpi.serializers.Paginated',
+    'DEFAULT_PAGINATION_CLASS': 'kpi.paginators.Paginated',
     'PAGE_SIZE': 100,
     'DEFAULT_AUTHENTICATION_CLASSES': [
         # SessionAuthentication and BasicAuthentication would be included by
@@ -522,6 +538,7 @@ RabbitMQ queue creation:
 See http://celery.readthedocs.org/en/latest/getting-started/brokers/rabbitmq.html#setting-up-rabbitmq.
 '''
 BROKER_URL = os.environ.get('KPI_BROKER_URL', '{{ kpi_broker_url }}')
+
 
 # http://django-registration-redux.readthedocs.org/en/latest/quickstart.html#settings
 ACCOUNT_ACTIVATION_DAYS = 3

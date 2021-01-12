@@ -1,11 +1,11 @@
-const KPI_LOGIN_URL = "{{ kpi_frontend_login_url }}";
+const ZEBRA_LOGIN_URL = "{{ kpi_frontend_login_url }}";
 
 export function getAuthUrl(url) {
-  return KPI_LOGIN_URL + "?return_url=" + url;
+  return ZEBRA_LOGIN_URL + "?return_url=" + url;
 }
 
 export function getZebraLoginUrl() {
-  return KPI_LOGIN_URL;
+  return ZEBRA_LOGIN_URL;
 }
 
 const SENTY_DSN = "{{ kpi_raven_js_dsn }}";

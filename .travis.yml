@@ -6,7 +6,7 @@ services:
 before_install:
   - sudo apt-get -qq update
 install:
-  - pip install molecule
+  - pip install molecule==3.0.8
   - pip install testinfra
   - pip install docker-py
 script:
