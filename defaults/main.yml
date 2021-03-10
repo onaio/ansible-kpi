@@ -135,3 +135,4 @@ django_environment_vars:
 web_page_title: "Ona"
 kpi_raven_frontend_env: ""
 kpi_raven_backend_env: ""
+kpi_enable_mongo_connection: false
