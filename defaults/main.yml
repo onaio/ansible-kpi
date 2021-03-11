@@ -136,3 +136,10 @@ web_page_title: "Ona"
 kpi_raven_frontend_env: ""
 kpi_raven_backend_env: ""
 kpi_enable_mongo_connection: false
+
+# Mongo vars
+kpi_mongo_db_host: "mongo"
+kpi_mongo_db_port: 27017
+kpi_mongo_db_name: "formhub"
+kpi_mongo_db_user: ""
+kpi_mongo_db_password: ""
