@@ -45,7 +45,7 @@ kpi_python_version: python{{ kpi_python_source_version }}
 kpi_checkout_path: "{{ kpi_versioned_path }}/{{ kpi_git_branch }}"
 kpi_app_path: "{{ kpi_system_user_home }}/app"
 kpi_versioned_path: "{{ kpi_app_path }}-versioned"
-kpi_git_branch: kpi_2.0
+kpi_git_branch: "ona-custom-changes"
 kpi_service_name: "{{ kpi_system_user }}"
 kpi_venv_path: "{{ kpi_system_user_home }}/.virtualenvs/{{ kpi_service_name }}"
 kpi_nvm_install_path: "{{ kpi_system_user_home }}/.nvm"
