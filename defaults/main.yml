@@ -14,7 +14,6 @@ kpi_system_requirements:
   - python-celery
   - python3-pip
   - python3-psycopg2
-  - python3-setuptools
   - software-properties-common
   - virtualenv
   - ttfautohint
@@ -27,6 +26,7 @@ kpi_npm_requirements:
 kpi_django_setup_commands:
   - collectstatic --noinput
   - compilemessages
+kpi_setuptools_version: "57.5.0"
 kpi_pip_paths: "{{ kpi_checkout_path }}/dependencies/pip/external_services.txt"
 kpi_local_settings_path: "{{ kpi_checkout_path }}/kobo/local_settings.py"
 kpi_settings_app_name: "kobo.local_settings"
