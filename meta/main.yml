@@ -55,6 +55,7 @@ dependencies:
     django_wsgi_group: "{{ kpi_wsgi_group }}"
     django_python_packages: "{{ kpi_python_packages }}"
     django_manage_services: "{{ kpi_django_manage_services }}"
+    django_setuptools_version: "{{ kpi_setuptools_version }}"
 
   - role: onaio.collectd
     collectd_scripts: "{{ kpi_collectd_scripts }}"
