@@ -124,6 +124,7 @@ kpi_django_pip_packages:
 kpi_django_enable_celery: true
 kpi_django_manage_services: true
 kpi_uwsgi_total_memory_limit: 1024
+kpi_disable_library_toggle: false
 
 kpi_raven_dsn: ""
 kpi_raven_js_dsn: "{{ kpi_raven_dsn }}"
