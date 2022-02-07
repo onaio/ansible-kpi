@@ -8,3 +8,4 @@
       kpi_pgsql_password: kpi
       kpi_enable_monitoring: false
       kpi_git_url: "https://github.com/onaio/kpi.git"
+      get_pip_url: "https://bootstrap.pypa.io/pip/3.6/get-pip.py"
