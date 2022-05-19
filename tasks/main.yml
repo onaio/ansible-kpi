@@ -30,6 +30,13 @@
   notify:
     - restart_service
 
+- name: Change ownership of all the KPI files
+  file:
+    path: "{{ kpi_checkout_path }}"
+    owner: "{{ kpi_system_user }}"
+    group: "{{ kpi_system_group }}"
+    recurse: true
+
 - name: Migrate and collect static files
   django_manage:
     command: "{{ item }}"
@@ -37,12 +44,7 @@
     virtualenv: "{{  kpi_venv_path }}"
     settings: "{{ kpi_settings_app_name }}"
   with_items: "{{ kpi_django_setup_commands }}"
+  become: true
+  become_user: "{{ kpi_system_user }}"
   notify:
     - restart_service
-
-- name: Change ownership of all the KPI files
-  file:
-    path: "{{ kpi_checkout_path }}"
-    owner: "{{ kpi_system_user }}"
-    group: "{{ kpi_system_group }}"
-    recurse: true
