@@ -81,6 +81,7 @@ kpi_kobocat_url: "http://localhost:8002"
 kpi_enketo_url: "http://localhost:8005"
 kpi_enketo_api_token: "qwertyuiop"
 kpi_broker_url: 'redis://localhost:6379/1'
+kpi_redis_host: 'redis://localhost:6379/2'
 kpi_log_path: "/var/log/{{ kpi_service_name }}"
 
 # TODO: Add documentation for this config
