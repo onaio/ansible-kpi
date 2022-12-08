@@ -16,8 +16,8 @@
 
 - name: Copy client-side config file
   template:
-    src: templates/kpi/config.es6.j2
-    dest: "{{ kpi_static_path }}/js/config.es6"
+    src: templates/kpi/config.ts.j2
+    dest: "{{ kpi_static_path }}/js/config.ts"
     mode: 0644
 
 - name: Build client code # noqa 301
