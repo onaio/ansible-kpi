@@ -848,7 +848,7 @@ SESSION_ENGINE = 'redis_sessions.session'
 # django-redis-session expects a dictionary with `url`
 redis_host = '{{ kpi_redis_host }}'
 redis_session_url = env.cache_url(
-    'REDIS_SESSION_URL', default=f'redis://{redis_host}:6379/7'
+    'REDIS_SESSION_URL', default=redis_host
 )
 SESSION_REDIS = {
     'url': redis_session_url['LOCATION'],
@@ -857,7 +857,7 @@ SESSION_REDIS = {
 }
 CACHES = {
     # Set CACHE_URL to override
-    'default': env.cache(default=f'redis://{redis_host}:6379/8'),
+    'default': env.cache(default=redis_host),
 }
 
 ENV = None
