@@ -128,7 +128,7 @@ if os.environ.get('DEFAULT_FROM_EMAIL'):
 # CORS Settings
 CORS_ORIGIN_WHITELIST = (
 {% for origin in kpi_cors_origin_whitelist %}
-    '{{ origin }}'
+    '{{ origin }}',
 {% endfor %}
 )
 # CORS_ORIGIN_ALLOW_ALL = True
