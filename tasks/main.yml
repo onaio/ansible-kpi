@@ -16,24 +16,24 @@
       become: true
       become_user: "{{ kpi_system_user }}"
   tags:
-   - nvm
+    - nvm
 
 - name: Copy client-side config file
-  become: true
-  become_user: "{{ kpi_system_user }}"
+  # become: true
+  # become_user: "{{ kpi_system_user }}"
   template:
     src: templates/kpi/config.es6.j2
     dest: "{{ kpi_static_path }}/js/config.es6"
     mode: 0644
 
-- name: Build client code # noqa 301
+- name: Build client code
   become: true
   become_user: "{{ kpi_system_user }}"
   command: "{{ kpi_nvm_npm_path }} run copy-fonts && {{  kpi_nvm_npm_path }} run build"
   args:
     chdir: "{{ kpi_checkout_path }}"
   environment:
-    PATH: "{{ kpi_nvm_node_dir }}/bin:{{ ansible_env.PATH }}"
+    PATH: "{{ kpi_nvm_node_dir }}/bin:{{ ansible_env.PATH }}:{{kpi_system_user_home}}/.virtualenvs/kpi/bin"
     HOME: "{{ kpi_system_user_home }}"
   notify:
     - restart_service
