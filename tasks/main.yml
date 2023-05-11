@@ -11,21 +11,41 @@
 
 - name: Install NVM and Global Node Packages
   include_tasks: install-nvm.yml
+  args:
+    apply:
+      become: true
+      become_user: "{{ kpi_system_user }}"
   tags:
-   - nvm
+    - nvm
 
 - name: Copy client-side config file
+  # become: true
+  # become_user: "{{ kpi_system_user }}"
   template:
     src: templates/kpi/config.es6.j2
     dest: "{{ kpi_static_path }}/js/config.es6"
     mode: 0644
 
-- name: Build client code # noqa 301
-  command: "{{ kpi_nvm_npm_path }} run copy-fonts && {{  kpi_nvm_npm_path }} run build"
+- name: Build client code (run copy-fonts)
+  become: true
+  become_user: "{{ kpi_system_user }}"
+  command: "{{ kpi_nvm_npm_path }} run copy-fonts"
   args:
     chdir: "{{ kpi_checkout_path }}"
   environment:
-    PATH: "{{ kpi_nvm_node_dir }}/bin:{{ ansible_env.PATH }}"
+    PATH: "{{ kpi_nvm_node_dir }}/bin:{{ ansible_env.PATH }}:{{kpi_system_user_home}}/.virtualenvs/kpi/bin"
+    HOME: "{{ kpi_system_user_home }}"
+  notify:
+    - restart_service
+
+- name: Build client code (run build)
+  become: true
+  become_user: "{{ kpi_system_user }}"
+  command: "{{  kpi_nvm_npm_path }} run build"
+  args:
+    chdir: "{{ kpi_checkout_path }}"
+  environment:
+    PATH: "{{ kpi_nvm_node_dir }}/bin:{{ ansible_env.PATH }}:{{kpi_system_user_home}}/.virtualenvs/kpi/bin"
     HOME: "{{ kpi_system_user_home }}"
   notify:
     - restart_service
@@ -38,13 +58,20 @@
     recurse: true
 
 - name: Migrate and collect static files
+  become: true
+  become_user: "{{ kpi_system_user }}"
   django_manage:
     command: "{{ item }}"
     app_path: "{{ kpi_checkout_path }}"
     virtualenv: "{{  kpi_venv_path }}"
     settings: "{{ kpi_settings_app_name }}"
   with_items: "{{ kpi_django_setup_commands }}"
-  become: true
-  become_user: "{{ kpi_system_user }}"
   notify:
     - restart_service
+
+- name: Ensure all KPI files are owned by the KPI user
+  file:
+    path: "{{ kpi_checkout_path }}"
+    owner: "{{ kpi_system_user }}"
+    group: "{{ kpi_system_group }}"
+    recurse: true

@@ -23,8 +23,6 @@
 
 - name: Install npm dependencies in package.json # noqa 301
   command: "{{ kpi_nvm_npm_path }} install"
-  become: true
-  become_user: "{{ kpi_system_user }}"
   args:
     chdir: "{{ kpi_checkout_path }}"
   environment:
