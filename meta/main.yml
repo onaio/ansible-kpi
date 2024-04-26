@@ -48,7 +48,7 @@ dependencies:
     django_pip_paths: "{{ kpi_pip_paths }}"
     django_pip_packages: "{{ kpi_django_pip_packages }}"
     django_venv_path: "{{ kpi_venv_path }}"
-    django_pid_socks_dir:  "{{ kpi_pid_socket_dir }}"
+    django_pid_socks_dir: "{{ kpi_pid_socket_dir }}"
     django_pid_file: "{{ kpi_pid_file }}"
     django_wsgi_socket: "{{ kpi_socket_file }}"
     django_service_group: "{{ kpi_service_group }}"

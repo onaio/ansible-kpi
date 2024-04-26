@@ -18,8 +18,6 @@
   with_items: "{{ kpi_npm_requirements }}"
   environment:
     PATH: "{{ kpi_nvm_node_dir }}/bin:{{ ansible_env.PATH }}"
-  notify:
-    - restart_service
 
 - name: Install npm dependencies in package.json # noqa 301
   command: "{{ kpi_nvm_npm_path }} install"
@@ -28,5 +26,4 @@
   environment:
     PATH: "{{ kpi_nvm_node_dir }}/bin:{{ ansible_env.PATH }}"
     HOME: "{{ kpi_system_user_home }}"
-  notify:
-    - restart_service
+
