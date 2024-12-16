@@ -28,8 +28,5 @@
   environment:
     PATH: "{{ kpi_nvm_node_dir }}/bin:{{ ansible_env.PATH }}"
     HOME: "{{ kpi_system_user_home }}"
-<<<<<<< Updated upstream
   notify:
     - restart_service
-=======
->>>>>>> Stashed changes

@@ -47,7 +47,6 @@ dependencies:
     django_apt_python_ppa: "{{ kpi_django_apt_python_ppa }}"
     django_pip_paths: "{{ kpi_pip_paths }}"
     custom_pip_version: "pip<24.1"
-    install_custom_pip_version: True
     django_pip_packages: "{{ kpi_django_pip_packages }}"
     django_venv_path: "{{ kpi_venv_path }}"
     django_pid_socks_dir:  "{{ kpi_pid_socket_dir }}"
