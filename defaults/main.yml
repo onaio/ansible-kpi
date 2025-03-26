@@ -110,7 +110,7 @@ kpi_enable_https: true
 kpi_wsgi_enable_threads: true
 kpi_service_group: "www-data"
 kpi_wsgi_group: "www-data"
-kpi_enable_monitoring: true
+kpi_enable_monitoring: false
 kpi_collectd_scripts:
   - unixsock
 kpi_monit_scripts:

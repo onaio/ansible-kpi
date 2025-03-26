@@ -4,15 +4,15 @@
     name: "{{ kpi_nvm_user }}"
     shell: /bin/bash
     group: "{{ kpi_system_group }}"
-    force: yes
-    append: yes
-    createhome: yes
+    force: true
+    append: true
+    createhome: true
     home: "{{ kpi_system_user_home }}"
 
 - name: Install NVM and Global Node Packages
   include_tasks: install-nvm.yml
   tags:
-   - nvm
+    - nvm
 
 - name: Copy client-side config file
   template:
