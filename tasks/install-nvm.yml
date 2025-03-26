@@ -1,3 +1,4 @@
+---
 - name: Install Node Version Manager
   include_role:
     name: onaio.nvm
@@ -11,10 +12,7 @@
     nvm_version: "{{ kpi_nvm_version }}"
 
 - name: Install npm global packages
-  npm:
-    executable: "{{ kpi_nvm_npm_path }}"
-    global: true
-    name: "{{ item }}"
+  shell: "{{ kpi_nvm_npm_path }} install -g {{ item }}"
   with_items: "{{ kpi_npm_requirements }}"
   environment:
     PATH: "{{ kpi_nvm_node_dir }}/bin:{{ ansible_env.PATH }}"
